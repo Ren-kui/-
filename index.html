@@ -506,7 +506,7 @@ function renderDashboards() {
   });
   document.getElementById('clothKpi').innerHTML = ck;
   const tk='';
-  const toolRows = [['指甲刀',53],['背带',63],['推车',64],['小洗盆',65],['尿布台',66],['睡床',67],['洗澡盆',68]];
+  const toolRows = [['指甲刀',54],['背带',65],['推车',66],['小洗盆',67],['尿布台',68],['睡床',69],['洗澡盆',70]];
   let tok='';
   toolRows.forEach(x => { tok += kpi(x[0], rowHave(x[1]), Math.max(num('main','J'+x[1]),1)); });
   document.getElementById('toolKpi').innerHTML = tok;
