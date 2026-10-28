@@ -452,7 +452,7 @@ function kpi(lab, have, tgt, opts) {
   const shown = opts.gapOnly ? gap : have;
   const pct = tgt>0 ? Math.min(100, Math.round(shown/tgt*100)) : 0;
   const gapCls = gap===0 ? 'gap-ok' : (tgt>0 && gap/tgt>0.6 ? 'gap-bad' : 'gap-warn');
-  const gapTxt = opts.later ? '⏳ 27年618囤' : (gap===0 ? '✅ 达标' : '缺口 '+gap);
+  const gapTxt = opts.plain ? '' : (opts.later ? '⏳ 27年618囤' : (gap===0 ? '✅ 达标' : '缺口 '+gap));
   return '<div class="kpi"><div class="lab">'+lab+'</div><div class="num">'+shown+'<small>/'+tgt+'</small></div><div class="gap '+gapCls+'">'+gapTxt+(opts.pend? ' <span style="color:var(--sub)">(含待蹲'+opts.pend+')</span>':'')+'</div><div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%"></div></div></div>';
 }
 function miniBoard(elId, title, badgeCls, badge, kpisHtml, pboxRows, noteHtml) {
@@ -479,12 +479,12 @@ function renderDashboards() {
   // 其它消耗品
   const tisHave = rowHave(11)+rowHave(12), tisTgt = num('main','J11')+num('main','J12');
   miniBoard('tissue','🧻 云柔巾（抽）', tisHave>=tisTgt?'b-ok':'b-part', tisHave>=tisTgt?'✅ 毕业':'基本毕业',
-    kpi('已有',tisHave,tisTgt)+kpi('目标(0-3月)',tisTgt,tisTgt)+kpi('缺口',tisHave,tisTgt,{gapOnly:1}),
+    kpi('已有',tisHave,tisTgt)+kpi('目标(0-3月)',tisTgt,tisTgt,{plain:1})+kpi('缺口',tisHave,tisTgt,{gapOnly:1}),
     '<div class="row"><span class="k">蹲价线：</span><span class="price">≤0.045/抽</span> 可囤 · <span class="price">≤0.03</span> 闭眼 · &gt;0.06 被割</div><div class="row"><span class="k">规格：</span><span class="spec">S/M码 3层（140×190）</span>· 可心柔别为"V9"加钱 · 德佑备选</div>',
     '已购 可心柔900@0.0216 + 德佑1000@0.02 → 38节看余量再补');
   const cotHave = rowHave(9)+rowHave(10), cotTgt = num('main','J9')+num('main','J10');
   miniBoard('cotton','🧽 棉柔巾（抽）','b-todo','3个月量·已开囤',
-    kpi('已有',cotHave,cotTgt)+kpi('目标(0-3月)',cotTgt,cotTgt)+kpi('缺口',cotHave,cotTgt,{gapOnly:1}),
+    kpi('已有',cotHave,cotTgt)+kpi('目标(0-3月)',cotTgt,cotTgt,{plain:1})+kpi('缺口',cotHave,cotTgt,{gapOnly:1}),
     '<div class="row"><span class="k">蹲价线：</span>婴儿款 <span class="price">≤0.11/抽</span> · 成人款 <span class="price">≤0.09/抽</span></div><div class="row"><span class="k">规格：</span><span class="spec">15×20cm 甜点位70%</span>· 成人款20×20平替20% · ⚠️12×20陷阱别买</div>',
     '你已抢跑：210抽@18.3元（≈0.087/抽）✅ 在母表第9行 · 距1800目标还差约1600抽');
   const padM = rowHave(14), padL = rowHave(15);
