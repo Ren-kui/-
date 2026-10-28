@@ -556,7 +556,7 @@ document.addEventListener('input', function(e) {
 });
 function showTab(name) {
   document.querySelectorAll('.tabbtn').forEach(b => b.classList.toggle('on', b.dataset.tab===name));
-  ['dash','reg','mx','ref'].forEach(t => document.getElementById('tab-'+t).classList.toggle('hidden', t!==name));
+  ['dash','reg','mx','ref','ledger'].forEach(t => document.getElementById('tab-'+t).classList.toggle('hidden', t!==name));
   if (name==='dash') { setTimeout(()=>{ if (window._chart) window._chart.resize(); else renderChart(); }, 50); }
 }
 function resetAll() {
