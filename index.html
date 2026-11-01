@@ -607,6 +607,7 @@ function copyDiff(mxOnly, refOnly) {
       if (JSON.stringify(a) !== JSON.stringify(b)) lines.push('矩阵第'+cur.r+'行 '+c+'列：'+(b==null?'(空)':fmt(b))+' → '+(a==null?'(空)':fmt(a)));
     }
   });
+  collectLedgerLines(lines);
   const txt = lines.length ? lines.join('\n') : '（暂无变更）';
   const done = () => { document.getElementById('saveState').textContent = '📋 已复制 '+lines.length+' 条变更，粘贴发给噜噜'; };
   if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(done).catch(()=>fallbackCopy(txt, done)); }
@@ -617,15 +618,38 @@ function fallbackCopy(txt, done) {
   ta.select(); try { document.execCommand('copy'); done(); } catch(e) {} document.body.removeChild(ta);
 }
 
-/* 流水台账：平台/备注列本机可编辑 */
+/* 流水台账：平台/备注列点击弹窗编辑（兼容手机WebView）+ 变更进导出 */
+function collectLedgerLines(lines) {
+  document.querySelectorAll('#tab-ledger td.led-edit').forEach(function(el) {
+    var cur = el.textContent.trim(), orig = el.dataset.orig || '';
+    if (cur !== orig) {
+      var parts = el.dataset.k.split('|');
+      lines.push('LEDGER|' + parts[0] + '|' + parts[1] + '|' + (parts[2]==='p'?'平台':'备注') + '|' + orig + '|' + cur);
+    }
+  });
+}
 function initLedgerEdit() {
   document.querySelectorAll('#tab-ledger td.led-edit').forEach(function(el) {
     var k = 'led_' + el.dataset.k;
+    el.dataset.orig = el.textContent.trim();
     var saved = localStorage.getItem(k);
-    if (saved !== null) el.textContent = saved;
-    el.contentEditable = 'true';
-    el.style.background = 'rgba(255,213,79,.18)';
-    el.addEventListener('blur', function() { localStorage.setItem(k, el.textContent.trim()); });
+    if (saved !== null && saved !== el.dataset.orig) {
+      el.textContent = saved;
+      el.style.background = 'rgba(129,199,132,.35)';
+    } else {
+      el.style.background = 'rgba(255,213,79,.18)';
+    }
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', function() {
+      var field = el.dataset.k.slice(-1) === 'p' ? '平台' : '备注';
+      var v = prompt('【' + field + '】改成（留空不变）：', el.textContent.trim());
+      if (v !== null && v.trim() !== el.textContent.trim()) {
+        el.textContent = v.trim();
+        localStorage.setItem(k, v.trim());
+        el.style.background = 'rgba(129,199,132,.35)';
+        document.getElementById('saveState').textContent = '✏️ 流水'+field+'已改，点上方「复制变更」发噜噜';
+      }
+    });
   });
 }
 renderReg(); renderMx(); renderRef(); initLedgerEdit(); save(true);
