@@ -55,6 +55,7 @@ footer{font-size:11px;color:var(--sub);text-align:center;margin:22px 0 8px}
 .regwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.reg{font-size:13px}
 table.reg th{position:sticky;top:44px;background:#1c2637;z-index:5}
+#mxTable th{position:static}  /* 矩阵仅~11行无需吸顶；iPad Safari sticky表格有重叠渲染bug */
 td.ce{min-width:44px;border:1px solid rgba(38,48,73,.9);border-radius:4px;cursor:text}
 td.ce:hover{background:rgba(66,212,244,.06)}
 td.ce:focus{outline:1.5px solid var(--blue);background:rgba(66,212,244,.1)}
