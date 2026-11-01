@@ -630,7 +630,7 @@ function collectLedgerLines(lines) {
 }
 function initLedgerEdit() {
   document.querySelectorAll('#tab-ledger td.led-edit').forEach(function(el) {
-    var k = 'led_' + el.dataset.k;
+    var k = 'ledv4_' + el.dataset.k;
     el.dataset.orig = el.textContent.trim();
     var saved = localStorage.getItem(k);
     if (saved !== null && saved !== el.dataset.orig) {
